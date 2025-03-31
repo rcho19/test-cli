@@ -6,7 +6,7 @@
  */
 import simpleGit, { SimpleGitOptions  } from 'simple-git'
 import chalk from 'chalk';
-const createLogger = require('progress-estimator');
+import createLogger from 'progress-estimator'
 
 const gitOpts: Partial<SimpleGitOptions> = {
   baseDir: process.cwd(), // 当前工程目录
@@ -32,7 +32,7 @@ export async function clone(url: string, prjName: string, options: string[]) {
 
     console.log() // 空行
     console.log(chalk.blackBright("================================="))
-    console.log(chalk.blackBright("======== 欢迎使用 auto-cli ======="))
+    console.log(chalk.blackBright("======= 欢迎使用 auto-cli ======="))
     console.log(chalk.blackBright("================================="))
     console.log()
     console.log(chalk.green("项目创建成功"))
