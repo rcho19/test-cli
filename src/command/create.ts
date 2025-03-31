@@ -6,8 +6,12 @@
  */
 import { input, select } from '@inquirer/prompts'
 import { clone } from '../utils/clone'
+import { name, version } from '../../package.json'
+import { gt } from 'lodash'
 import path from "path"
 import fs from "fs-extra"
+import axios, { AxiosResponse } from 'axios'
+import chalk from 'chalk';
 
 // 模板接口
 interface TemplateInfo {
@@ -57,6 +61,39 @@ const isOverwrite = (dirName: string) => {
   })
 }
 
+// 获取npm包信息
+async function getNpmInfo(name: string) {
+  const npmUrl = `https://registry.npmjs.org/${name}`
+
+  let res = {}
+  try {
+    res = await axios.get(npmUrl)
+  } catch (error) {
+    console.error(`查询版本错误：${error}`)
+  }
+  return res
+}
+
+// 返回版本信息
+async function getNpmLatestVersion(name: string) {
+  const { data } = (await getNpmInfo(name)) as AxiosResponse
+
+  // console.info('npm info', data)
+  return data['dist-tags'].latest
+}
+
+// 检查版本
+async function checkCurrenVersion(name: string, version: string) {
+  const latestVersion = await getNpmLatestVersion(name)
+  const needUpdate = gt(latestVersion, version)
+  if(needUpdate) {
+    console.warn(`检查到最新版本为${chalk.yellowBright(latestVersion)}，当前版本为${chalk.yellowBright(version)}`)
+    console.log(`可使用 ${chalk.blueBright('npm install rcho-cli@latest')} 更新，也可使用 ${chalk.blueBright('rcho update')} 命令更新`)
+  }
+
+  return needUpdate
+}
+
 export async function create(projectName: string) {
   // 初始化模板列表
   const templateList = Array.from(tempaltes).map(
@@ -88,6 +125,9 @@ export async function create(projectName: string) {
       return
     }
   }
+
+  // 检测当前脚手架版本是否最新
+  await checkCurrenVersion(name, version)
 
   const templateName = await select({
     message: "请选择项目模板",
