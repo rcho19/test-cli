@@ -5,7 +5,7 @@
 - 用于快速搭建前端项目的命令行工具
 
 ## 模板
-- 快速生成Vue3 + Vite4 + TS + ElementPuls + Pinia的模板
+- 快速生成 [Vue3 + Vite4 + TS + ElementPuls + Pinia的模板](https://github.com/rcho19/admin-pro)
 
 
 ## 安装
