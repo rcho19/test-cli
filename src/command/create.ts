@@ -135,7 +135,7 @@ export async function create(projectName: string) {
   })
 
   const info = tempaltes.get(templateName)
-  console.log("template info", info)
+  // console.log("template info", info)
 
   if(info) {
     clone(info.downloadUrl, projectName, ['-b', info.branch])

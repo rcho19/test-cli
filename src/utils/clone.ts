@@ -7,6 +7,8 @@
 import simpleGit, { SimpleGitOptions  } from 'simple-git'
 import chalk from 'chalk';
 import createLogger from 'progress-estimator'
+import log from './log'
+const figlet = require("figlet");
 
 const gitOpts: Partial<SimpleGitOptions> = {
   baseDir: process.cwd(), // 当前工程目录
@@ -21,6 +23,12 @@ const logger = createLogger({
   }
 })
 
+// 控制台logo打印
+const goodPrinter = async () => {
+  const data = await figlet('rcho-cli')
+  console.log(chalk.rgb(40, 156, 193).visible(data))
+}
+
 export async function clone(url: string, prjName: string, options: string[]) {
 
   const git = simpleGit(gitOpts)
@@ -30,17 +38,19 @@ export async function clone(url: string, prjName: string, options: string[]) {
       estimate: 5000  // 预计下载时间
     })
 
-    console.log() // 空行
+    console.log()
     console.log(chalk.blackBright("================================="))
     console.log(chalk.blackBright("======= 欢迎使用 auto-cli ======="))
     console.log(chalk.blackBright("================================="))
-    console.log()
-    console.log(chalk.green("项目创建成功"))
-    console.log(chalk.green("执行以下命令启动项目："))
-    console.info(`cd ${chalk.blueBright(prjName)}`)
-    console.info(`${chalk.yellow('pnpm')} install`)
-    console.info(`${chalk.yellow('pnpm')} run dev`)
+
+    log.success(chalk.green("项目创建成功"))
+    log.success(chalk.green("执行以下命令启动项目："))
+    log.info(`cd ${chalk.blueBright(prjName)}`)
+    log.info(`${chalk.yellow('pnpm')} install`)
+    log.info(`${chalk.yellow('pnpm')} run dev`)
+    goodPrinter()
+
   } catch (error) {
-    console.error(chalk.red(`下载失败，${error}`))
+    log.error(chalk.red(`下载失败，${error}`))
   }
 }
