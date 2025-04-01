@@ -23,6 +23,9 @@ rcho create
 # 执行项目文件夹名称并选择模板创建新项目
 rcho create [projectName]
 
+# 更新脚手架版本到最新版本
+rcho update
+
 # 查看脚手架版本
 rcho -v
 rcho --version
